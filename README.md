@@ -1,6 +1,22 @@
 # vertxs
 对Vert.x框架的封装
 
+# Promise
+```java
+        Vertx vertx = Vertx.vertx();
+
+        Promise.newInstance(vertx)
+                .then((context, onResult) -> {
+
+                    context.put("result", "some text to share");
+                    onResult.accept(true);
+                })
+                .then((context, onResult) -> onResult.accept(context.containsKey("result")))
+                .except((context) -> System.out.println("Failure: " + context.encode()))
+                .done((context) -> System.out.println("Success: " + context.encode()))
+                .timeout(3000)
+                .eval();
+```
 
 # AOP
 ```java
