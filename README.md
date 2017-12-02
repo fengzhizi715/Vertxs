@@ -2,6 +2,8 @@
 对Vert.x框架的封装
 
 # Promise
+
+## 1. 基本使用
 ```java
         Vertx vertx = Vertx.vertx();
 
@@ -16,6 +18,44 @@
                 .done((context) -> System.out.println("Success: " + context.encode()))
                 .timeout(3000)
                 .eval();
+```
+
+## 2. 多个回调并行
+```java
+        Vertx vertx = Vertx.vertx();
+
+        Promise.newInstance(vertx)
+                .all((context, onResult) -> {
+                            System.out.println("Also 'all' call 1");
+                            onResult.accept(true);
+                        },
+                        (context, onResult) -> {
+                            System.out.println("Also 'all' call 2");
+                            onResult.accept(true);
+                        })
+                .done((context) -> System.out.println("Success"))
+                .eval();
+```
+
+## 3. Promise Factory
+```java
+        Vertx vertx = Vertx.vertx();
+
+        PromiseFactory factory = new PromiseFactory(vertx);
+// Promise 1
+        factory.create().then((context, onResult) -> {
+            System.out.println("a new promise");
+            onResult.accept(true);
+        }).eval();
+
+// Promise 2
+        factory.createParallel((context, onResult) -> {
+            System.out.println("a test");
+            onResult.accept(true);
+        },(context, onResult) -> {
+            System.out.println("a test 2");
+            onResult.accept(true);
+        }).eval();
 ```
 
 # AOP
