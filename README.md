@@ -4,6 +4,11 @@
 
 # AOP
 ```java
+        Vertx vertx = Vertx.vertx();
+        HttpServer server = vertx.createHttpServer();
+
+        Router router = Router.router(vertx);
+        
         Route route = router.route(HttpMethod.POST, "/some/path");
 
         ProxyHandler proxyHandler = new ProxyHandler(new Handler<RoutingContext>() {
@@ -33,4 +38,6 @@
         });
 
         route.handler(proxyHandler);
+        
+        server.requestHandler(router::accept).listen(8080);
 ```
